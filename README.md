@@ -1,3 +1,25 @@
+# Google Search
+### Overview
+Ability to search up books and save. Search up on one page and saving functionality at the other.
+
+### Additional Notes for TA's
+On my heroku I havn't deployed my most recent becasue it is just errors. because I haven't finished my search functionality. It would look something like this:
+
+Creates class for Search
+    --Constructor
+        Super() // to inherit the properties
+        State
+            --bookIn
+            --bookData
+        Clicks
+    --HandleChanges
+    --Handleclicksearch
+
+    --render()
+        --Render inside the container
+
+
+///////////////////////////////////////////////////////
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
