@@ -3,49 +3,64 @@ import API from "../utils/API";
 import Container from "../components/Container";
 import SearchForm from "../components/SearchForm";
 import SearchResults from "../components/SearchResults";
-import Alert from "../components/Alert";
+// import Alert from "../components/Alert";
 
 class Search extends Component {
   state = {
-    search: "",
-    breeds: [],
-    results: [],
-    error: ""
+    books: [],
+    title: "",
+    author: "",
+    synopsis: ""
   };
 
-  // When the component mounts, get a list of all available base breeds and update this.state.breeds
   componentDidMount() {
-    API.getBaseBreedsList()
-      .then(res => this.setState({ breeds: res.data.message }))
-      .catch(err => console.log(err));
+    this.loadBooks();
   }
 
+  loadBooks = () => {
+    API.getBooks()
+      .then(res =>
+        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
+      )
+      .catch(err => console.log(err));
+  };
+
+  deleteBook = id => {
+    API.deleteBook(id)
+      .then(res => this.loadBooks())
+      .catch(err => console.log(err));
+  };
+
   handleInputChange = event => {
-    this.setState({ search: event.target.value });
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
   };
 
   handleFormSubmit = event => {
     event.preventDefault();
-    API.getDogsOfBreed(this.state.search)
-      .then(res => {
-        if (res.data.status === "error") {
-          throw new Error(res.data.message);
-        }
-        this.setState({ results: res.data.message, error: "" });
+    if (this.state.title && this.state.author) {
+      API.saveBook({
+        title: this.state.title,
+        author: this.state.author,
+        synopsis: this.state.synopsis
       })
-      .catch(err => this.setState({ error: err.message }));
+        .then(res => this.loadBooks())
+        .catch(err => console.log(err));
+    }
   };
   render() {
     return (
       <div>
         <Container style={{ minHeight: "80%" }}>
           <h1 className="text-center">Search By Breed!</h1>
-          <Alert
+          {/* <Alert
             type="danger"
             style={{ opacity: this.state.error ? 1 : 0, marginBottom: 10 }}
           >
             {this.state.error}
-          </Alert>
+          </Alert> */}
           <SearchForm
             handleFormSubmit={this.handleFormSubmit}
             handleInputChange={this.handleInputChange}
